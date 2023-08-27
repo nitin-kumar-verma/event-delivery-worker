@@ -16,8 +16,9 @@ import (
 )
 
 type Event struct {
-	UserID  string `json:"userId"`
-	Payload string `json:"payload"`
+	UserID    string `json:"userId"`
+	Payload   string `json:"payload"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 const (
@@ -37,7 +38,11 @@ func main() {
 	//Invoke delivery worker on a goroutine
 	go deliveryWorker()
 
-	err = app.Listen(":3001")
+	port := os.Getenv("PORT")
+	if port != "" {
+		port = ":3001"
+	}
+	err = app.Listen(":port")
 	if err != nil {
 		panic(err)
 	}
