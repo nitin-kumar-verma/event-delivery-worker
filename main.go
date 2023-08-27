@@ -38,11 +38,7 @@ func main() {
 	//Invoke delivery worker on a goroutine
 	go deliveryWorker()
 
-	port := os.Getenv("PORT")
-	if port != "" {
-		port = ":3001"
-	}
-	err = app.Listen(port)
+	err = app.Listen(":3001")
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +89,7 @@ func fanOutRequests(event Event, ctx context.Context, client *redis.Client, rpop
 
 		_, err := txPipeline.Exec(ctx)
 		if err != nil {
-
+			log.Println(err.Error())
 			//Error while deleting key from redis needs to be reported and dev intervention might be required
 		}
 
@@ -126,6 +122,7 @@ func hitEndpointWithBackoff(endpoint string, event Event) {
 func hitEndpoint(endpoint string) error {
 	resp, err := http.Get(endpoint)
 	if err != nil {
+		log.Println(err.Error())
 		return err
 	}
 	defer resp.Body.Close()
