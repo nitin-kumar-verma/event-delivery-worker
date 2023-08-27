@@ -5,7 +5,7 @@ thus ensuring one worker owns processing for one event.
 
 If a worker instance fails durings the processing, the event will remain in 'processing_events' list.
 
-There will be another worker(event-delivery-job) which runs on scheduled intervals and it polls 'processing_events' list
+A script can run on scheduled intervals which polls 'processing_events' list
 for events which were pushed before a certain timestamp, and pushed them back to 'queued_events' so that they can be reprocessed.
 
 The endpoints "https://event-delivery-dest-1.deno.dev/", "https://event-delivery-dest-2.deno.dev/", "https://event-delivery-dest-3.deno.dev/" 
