@@ -42,7 +42,7 @@ func main() {
 	if port != "" {
 		port = ":3001"
 	}
-	err = app.Listen(":port")
+	err = app.Listen(port)
 	if err != nil {
 		panic(err)
 	}
@@ -86,6 +86,7 @@ func fanOutRequests(event Event, ctx context.Context, client *redis.Client, rpop
 	hitEndpointWithBackoff("https://event-delivery-dest-3.deno.dev/", event)
 
 	//Delete the event from processing queue be it processed or retries max number of times
+
 	defer func() {
 		txPipeline := client.TxPipeline()
 		txPipeline.LRem(ctx, PROCESSING_KEY, 0, rpopResult.Val())
